@@ -1,0 +1,55 @@
+[project]
+name = "bistprobe"
+version = "0.1.0"
+description = "UART probe for the BIST dataport"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Matthew Bernath", email = "mbernath@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pyserial>=3.5",
+]
+
+[project.scripts]
+bistprobe = "bistprobe.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "pytest>=9.2.0",
+    "ruff>=0.16.10",
+    "types-pyserial>=3.5.0.20261104",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D",      # docstrings: not required on every function
+    "T201",   # print is the CLI's output
+    "COM812", # conflicts with ruff format
+    "CPY001", # no copyright headers
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",   # pytest uses assert
+    "INP001", # tests are not a package
+]
+
+[tool.mypy]
+strict = true
+files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--strict-markers", "--strict-config"]
